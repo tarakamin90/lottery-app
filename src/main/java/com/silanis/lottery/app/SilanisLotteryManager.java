@@ -1,10 +1,12 @@
 package com.silanis.lottery.app;
 
-import com.silanis.lottery.handlerequest.Command;
-import com.silanis.lottery.handlerequest.Draw;
-import com.silanis.lottery.handlerequest.Purchase;
-import com.silanis.lottery.handlerequest.Winners;
+import com.silanis.lottery.commandhandler.Command;
+import com.silanis.lottery.commandhandler.Draw;
+import com.silanis.lottery.commandhandler.Purchase;
+import com.silanis.lottery.commandhandler.Winners;
 import com.silanis.lottery.util.ConsoleInput;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -15,8 +17,9 @@ import java.util.Scanner;
  * Class with main method to run the Application
  */
 public class SilanisLotteryManager {
-    Scanner consoleInput;
-    LotteryInterface lotteryApp;
+    private static final Log logger = LogFactory.getLog(SilanisLotteryManager.class);
+    private Scanner consoleInput;
+    private LotteryInterface lotteryApp;
 
     public SilanisLotteryManager() {
         consoleInput = ConsoleInput.getInstance();
@@ -30,11 +33,11 @@ public class SilanisLotteryManager {
     }
 
     /**
-     * This method is used to run the Lottery Application.
-     *
-     * @return false if Exit option is selected, otherwise return true.
+     * This method is used to run the console UI for Lottery Application.
      */
     public void runApplication() {
+        logger.debug("Start runApplication()");
+
         System.out.println("Welcome to Silanis LotteryApp !!!");
         boolean chooseOptionFlag = true;
         while (chooseOptionFlag)
@@ -55,36 +58,45 @@ public class SilanisLotteryManager {
             chooseOptionFlag = processCommand(optionSelected);
         }
         consoleInput.close();
+
+        logger.debug("End runApplication()");
     }
 
     /**
-     * This method is used to process command for the option selected from displayed menu.
+     * Method processes the selected option and calls appropriate command
      *
      * @param optionSelected
      *
      * @return false if Exit option is selected, otherwise return true.
+     *
+     * Used Command design pattern
      */
     public boolean processCommand(int optionSelected) {
+        logger.debug("Start processCommand()");
+
+        boolean result = true;
         switch (optionSelected) {
             case 1: {
                 Command purchase = new Purchase(lotteryApp);
                 purchase.execute();
-                return true;
+                break;
             }
             case 2: {
                 Command draw = new Draw(lotteryApp);
                 draw.execute();
-                return true;
+                break;
             }
             case 3: {
                 Command winners = new Winners(lotteryApp);
                 winners.execute();
-                return true;
+                break;
             }
-            case 4: return false;
+            case 4: result = false;
+                break;
             default:
                 System.out.println("Please choose correct option");
-                return true;
         }
+        logger.debug("End processCommand()");
+        return result;
     }
 }

@@ -4,13 +4,15 @@ import com.silanis.lottery.util.Utility;
 
 /**
  * Created by TARAK on 2017-04-13.
+ *
+ * Stores the ticket information
  */
 public class Ticket {
-    private Player player;
-    private String ticketSeries;
-    private String ticketNo;
-    private Ball ball;
-    private int winningAmt;
+    private Player player; // player who owns the tickets
+    private String ticketSeries; // ticket series for the Lottery
+    private String ticketNo; // ticket no.
+    private Ball ball; // ball no.
+    private int winningAmt; // winning amt if the ball no wins the lottery
 
     public Ticket(Player player, Ball ball) {
         this.player = player;
@@ -36,7 +38,6 @@ public class Ticket {
     }
 
     public Player getPlayer() {
-
         return player;
     }
 
