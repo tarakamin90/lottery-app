@@ -6,6 +6,7 @@ import com.silanis.lottery.handlerequest.Purchase;
 import com.silanis.lottery.handlerequest.Winners;
 import com.silanis.lottery.util.ConsoleInput;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -42,7 +43,15 @@ public class SilanisLotteryManager {
             System.out.println("2. Draw ");
             System.out.println("3. Print winning tickets ");
             System.out.println("4. Exit ");
-            int optionSelected = consoleInput.nextInt();
+            int optionSelected;
+            try {
+                 optionSelected = consoleInput.nextInt();
+            } catch(InputMismatchException e)
+            {
+                //add logger here
+                consoleInput.next();
+                optionSelected = 0;
+            }
             chooseOptionFlag = processCommand(optionSelected);
         }
         consoleInput.close();

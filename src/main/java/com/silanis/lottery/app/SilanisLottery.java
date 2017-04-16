@@ -56,7 +56,7 @@ public class SilanisLottery implements LotteryInterface {
 
     @Override
     public void draw() {
-        if(soldTicketList.size() >= 3) {
+        if(soldTicketList.size() >= 3 && !isDrawStarted) {
 
             this.isDrawStarted = true;
             double availPrizeMoney = moneyInPot / 2;
@@ -69,20 +69,23 @@ public class SilanisLottery implements LotteryInterface {
             int firstPrizeBallNo = BallNumberGenerator.getWinnerBallNumber();
             winners.add(firstPrizeBallNo);
 
-            int secondPrizeBallNo = BallNumberGenerator.getWinnerBallNumber();
-            while (winners.contains(secondPrizeBallNo)) {
-                secondPrizeBallNo = BallNumberGenerator.getWinnerBallNumber();
+            int temp = BallNumberGenerator.getWinnerBallNumber();
+            while (winners.contains(temp)) {
+                temp = BallNumberGenerator.getWinnerBallNumber();
             }
-            int thirdPrizeBallNo = BallNumberGenerator.getWinnerBallNumber();
-            while (winners.contains(thirdPrizeBallNo)) {
-                thirdPrizeBallNo = BallNumberGenerator.getWinnerBallNumber();
-            }
+            int secondPrizeBallNo = temp;
 
-            Ticket winningTicket1 = getTicketWithBallNo(firstPrizeBallNo);
+            temp = BallNumberGenerator.getWinnerBallNumber();
+            while (winners.contains(temp)) {
+                temp = BallNumberGenerator.getWinnerBallNumber();
+            }
+            int thirdPrizeBallNo = temp;
+
+            Ticket winningTicket1 = soldTicketList.stream().filter(f -> f.getBall().getBallNo() == firstPrizeBallNo).findFirst().orElse(null);
             winningTicket1.setWinningAmt(firstPrizeAmt);
-            Ticket winningTicket2 = getTicketWithBallNo(secondPrizeBallNo);
+            Ticket winningTicket2 = soldTicketList.stream().filter(f -> f.getBall().getBallNo() == secondPrizeBallNo).findFirst().orElse(null);
             winningTicket2.setWinningAmt(secondPrizeAmt);
-            Ticket winningTicket3 = getTicketWithBallNo(thirdPrizeBallNo);
+            Ticket winningTicket3 = soldTicketList.stream().filter(f -> f.getBall().getBallNo() == thirdPrizeBallNo).findFirst().orElse(null);
             winningTicket3.setWinningAmt(thirdPrizeAmt);
 
             winnerDtlsMap.put(1, winningTicket1);
@@ -134,18 +137,5 @@ public class SilanisLottery implements LotteryInterface {
         soldTicketList = new ArrayList<>();
         BallNumberGenerator.resetBallNumberGenerator();
         isDrawStarted = false;
-    }
-
-    private Ticket getTicketWithBallNo(int ballNo) {
-        Ticket ticket = null;
-
-        for (int i = 0; i < soldTicketList.size() ; i++) {
-            ticket = soldTicketList.get(i);
-            if(ticket.getBall().getBallNo() == ballNo)
-                return ticket;
-        }
-
-        System.out.println("Ticket with ball no:" + ballNo + " not found");
-        return null;
     }
 }
