@@ -6,5 +6,5 @@ package com.silanis.lottery.commandhandler;
  * Command design Pattern
  */
 public interface Command {
-    void execute();
+    boolean execute();
 }

@@ -8,6 +8,7 @@ import java.util.Random;
 
 /**
  * Created by TARAK on 2017-04-13.
+ * Generator ball nos randomly
  */
 public class BallNumberGenerator {
     private static final Log logger = LogFactory.getLog(BallNumberGenerator.class);

@@ -14,6 +14,7 @@ public class Config {
 
     public static int TICKET_PRICE = 10; // Price per ticket
 
+    // minimum value 3
     public static int MIN_TICKET_SOLD_TO_ALLOW_DRAW = 3; // Minimum tickets sold to allow a draw
 
     public static int AVAIL_PRIZE_MONEY_PERCENTAGE = 50; // Available prize money in percentage for given amount in pot

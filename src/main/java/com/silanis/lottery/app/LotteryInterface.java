@@ -1,5 +1,7 @@
 package com.silanis.lottery.app;
 
+import java.util.Map;
+
 /**
  * Created by TARAK on 2017-04-13.
  *
@@ -8,9 +10,9 @@ package com.silanis.lottery.app;
  */
 public interface LotteryInterface {
 
-    public void purchase();
+    public Ticket purchase(String name);
 
-    public void draw();
+    public Double draw();
 
-    public void winners();
+    public Map<Integer, Ticket> winners();
 }

@@ -9,28 +9,33 @@ import java.util.Random;
 
 /**
  * Created by TARAK on 2017-04-13.
+ * Utlity
  */
 public class Utility {
     private static final Log logger = LogFactory.getLog(Utility.class);
     private static SimpleDateFormat sdf = new SimpleDateFormat("MMMyyyy");
 
     /**
-     * // Every month new ticket series would be assigned to all tickets
-     // and that would be combination of current month and year eg: JAN2016
-
+     * Every month new ticket series would be assigned to all tickets
+     * and that would be combination of current month and year eg: JAN2016
      * @return Series
      */
     public static String getMonthYearSeriesNo() {
-
-
         return sdf.format(new Date()).toUpperCase();
     }
 
+    /**
+     * @return series in MMM-yyyy format
+     */
     public static String getUserReadableMonthYearSeries() {
         SimpleDateFormat sdf = new SimpleDateFormat(("MMM-yyyy"));
         return sdf.format(new Date()).toUpperCase();
     }
 
+    /**
+     * @param seriesNo
+     * @return series in MMM-yyyy format
+     */
     public static String getUserReadableMonthYearSeries(String seriesNo) {
         logger.debug("Start getMonthYearSeriesNo()");
         String month = seriesNo.substring(0 , 3);

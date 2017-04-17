@@ -8,7 +8,6 @@ import com.silanis.lottery.util.ConsoleInput;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -20,6 +19,10 @@ public class SilanisLotteryManager {
     private static final Log logger = LogFactory.getLog(SilanisLotteryManager.class);
     private Scanner consoleInput;
     private LotteryInterface lotteryApp;
+
+    private boolean isDrawStarted = false; // stores the status of the draw
+    private boolean winnersDisplayed = false; // stores the status of the winners announcement
+
 
     public SilanisLotteryManager() {
         consoleInput = ConsoleInput.getInstance();
@@ -48,11 +51,13 @@ public class SilanisLotteryManager {
             System.out.println("4. Exit ");
             int optionSelected;
             try {
-                 optionSelected = consoleInput.nextInt();
-            } catch(InputMismatchException e)
-            {
-                //add logger here
-                consoleInput.next();
+                String strInput = consoleInput.nextLine();
+                while("".equals(strInput)) {
+                    strInput = consoleInput.nextLine();
+                }
+                optionSelected = Integer.parseInt(strInput);
+            } catch (NumberFormatException e) {
+                logger.error("Error in runApplication(): " + e);
                 optionSelected = 0;
             }
             chooseOptionFlag = processCommand(optionSelected);
@@ -64,9 +69,7 @@ public class SilanisLotteryManager {
 
     /**
      * Method processes the selected option and calls appropriate command
-     *
      * @param optionSelected
-     *
      * @return false if Exit option is selected, otherwise return true.
      *
      * Used Command design pattern
@@ -77,18 +80,33 @@ public class SilanisLotteryManager {
         boolean result = true;
         switch (optionSelected) {
             case 1: {
-                Command purchase = new Purchase(lotteryApp);
-                purchase.execute();
+                if(!isDrawStarted) {
+                    Command purchase = new Purchase(lotteryApp);
+                    purchase.execute();
+                }
+                else {
+                    System.out.println("Cannot purchase a ticket. Draw is done. Please announce the winners to start new Lottery.");
+                }
                 break;
             }
             case 2: {
-                Command draw = new Draw(lotteryApp);
-                draw.execute();
+                if(!isDrawStarted) {
+                    Command draw = new Draw(lotteryApp);
+                    this.isDrawStarted = draw.execute();
+                } else {
+                    System.out.println("Draw is done. Please announce the winners to start new Lottery.");
+                }
                 break;
             }
             case 3: {
-                Command winners = new Winners(lotteryApp);
-                winners.execute();
+                if (isDrawStarted) {
+                    Command winners = new Winners(lotteryApp);
+                    winners.execute();
+
+                    isDrawStarted = false;
+                } else {
+                    System.out.println("Cannot display winners. Please perform the draw first.");
+                }
                 break;
             }
             case 4: result = false;
